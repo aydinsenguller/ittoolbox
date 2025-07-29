@@ -1,0 +1,105 @@
+@echo off
+chcp 65001 >nul
+title IT TOOLBOX - Yardımcı Araçlar
+:menu
+cls
+echo ==================================================
+echo       IT TOOLBOX Ver 1.0 - Aydın Şengüller / Sistem Yöneticisi
+echo ==================================================
+echo.
+echo 🔹 Kullanıcı ve Sistem Bilgisi
+echo   1. Aktif Kullanıcı ve Bilgisayar Adı
+echo   2. Oturum Açmış Kullanıcıları Listele
+echo   3. Son Yeniden Başlatma Tarihi
+echo   4. Son Format Tarihi (manuel kontrol)
+echo.
+echo 🌐 Ağ ve IP İşlemleri
+echo   5. IP Adresini Göster
+echo   6. Tüm Ağ Yapılandırmasını Göster
+echo   7. IP'yi Yenile
+echo   8. DNS Önbelleğini Temizle
+echo   9. Ağ Bağlantılarını Listele
+echo  10. Ping Testi Yap
+echo.
+echo 🖨️ Yazıcı ve Kuyruk İşlemleri
+echo  11. Yüklü Yazıcıları Listele
+echo  12. Varsayılan Yazıcıyı Göster/Değiştir
+echo  13. Yazıcı Kuyruğunu Temizle
+echo  14. Yazıcı Servislerini Yeniden Başlat
+echo.
+echo 🧰 Windows ve Sistem Bakımı
+echo  15. Sistem Bilgilerini Göster
+echo  16. Disk Durumu
+echo  17. Sistem Dosyalarını Onar
+echo  18. Disk Temizliği
+echo  19. Gereksiz Dosyaları Sil
+echo.
+echo 🔄 Otomasyon ve Domain İşlemleri
+echo  20. SMBv1 Devre Dışı Bırak
+echo  21. Domain Admin'e Lokal Yetki Aktar
+echo  22. Local User Bilgilerini Temizle
+echo  23. Bilgisayarı Yeniden Başlat
+echo  24. Bilgisayarı Kapat
+echo  25. Grup Politikalarını Güncelle
+echo.
+echo 📦 Yazılım ve Lisans Bilgisi
+echo  26. Windows Sürümünü Göster
+echo  27. Lisans Durumunu Göster
+echo  28. Lisans Detayları
+echo  29. Program Ekle/Kaldır Panelini Aç
+echo.
+echo 📁 Sistem Kısayolları
+echo  30. Bilgisayar Yönetimi (compmgmt.msc)
+echo  31. Aygıt Yöneticisi (devmgmt.msc)
+echo  32. Disk Yönetimi (diskmgmt.msc)
+echo  33. Program Kaldır (appwiz.cpl)
+echo  34. Ağ Bağlantıları (ncpa.cpl)
+echo  35. Gelişmiş Kullanıcı Yönetimi (control userpasswords2)
+echo  36. Sistem Özellikleri (sysdm.cpl)
+echo  37. Güvenlik Duvarı Ayarları (firewall.cpl)
+echo  38. Windows Özelliklerini Aç/Kapat (optionalfeatures)
+echo.
+echo ❌ 99. Çıkış
+echo ==================================================
+set /p choice=Bir işlem numarası seçin: 
+
+if "%choice%"=="1" (echo Bilgisayar: %COMPUTERNAME%, Kullanıcı: %USERNAME% && pause)
+if "%choice%"=="2" (query user && pause)
+if "%choice%"=="3" (systeminfo | find "System Boot Time" && pause)
+if "%choice%"=="4" (echo Manuel kontrol: Son format tarihi genellikle "C:\Windows\Panther" içindeki setupact.log ile görülebilir && pause)
+if "%choice%"=="5" (ipconfig && pause)
+if "%choice%"=="6" (ipconfig /all && pause)
+if "%choice%"=="7" (ipconfig /renew && pause)
+if "%choice%"=="8" (ipconfig /flushdns && pause)
+if "%choice%"=="9" (netstat -ano && pause)
+if "%choice%"=="10" (set /p ip=Ping adresini girin: && ping %ip% && pause)
+if "%choice%"=="11" (wmic printer list brief && pause)
+if "%choice%"=="12" (wmic printer get name,default && pause)
+if "%choice%"=="13" (net stop spooler && del /q/f/s %systemroot%\System32\spool\PRINTERS\* && net start spooler && pause)
+if "%choice%"=="14" (net stop spooler && net start spooler && pause)
+if "%choice%"=="15" (systeminfo && pause)
+if "%choice%"=="16" (wmic diskdrive get status && pause)
+if "%choice%"=="17" (sfc /scannow && pause)
+if "%choice%"=="18" (cleanmgr && pause)
+if "%choice%"=="19" (del /q/f/s %temp%\* && pause)
+if "%choice%"=="20" (powershell -Command "Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart" && pause)
+if "%choice%"=="21" (powershell -Command "Add-LocalGroupMember -Group 'Administrators' -Member 'DOMAIN\\Domain Admins'" && pause)
+if "%choice%"=="22" (powershell -Command "Get-LocalUser | Where-Object { $_.Name -ne 'Administrator' -and $_.Enabled } | Remove-LocalUser" && pause)
+if "%choice%"=="23" (shutdown /r /t 0)
+if "%choice%"=="24" (shutdown /s /t 0)
+if "%choice%"=="25" (gpupdate /force && pause)
+if "%choice%"=="26" (winver && pause)
+if "%choice%"=="27" (slmgr /xpr && pause)
+if "%choice%"=="28" (slmgr /dlv && pause)
+if "%choice%"=="29" (start appwiz.cpl)
+if "%choice%"=="30" (start compmgmt.msc)
+if "%choice%"=="31" (start devmgmt.msc)
+if "%choice%"=="32" (start diskmgmt.msc)
+if "%choice%"=="33" (start appwiz.cpl)
+if "%choice%"=="34" (start ncpa.cpl)
+if "%choice%"=="35" (start control userpasswords2)
+if "%choice%"=="36" (start sysdm.cpl)
+if "%choice%"=="37" (start firewall.cpl)
+if "%choice%"=="38" (start optionalfeatures)
+if "%choice%"=="99" (exit)
+goto menu
